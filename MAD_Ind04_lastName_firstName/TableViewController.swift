@@ -8,14 +8,22 @@
 import UIKit
 
 class TableViewController: UITableViewController {
-
-    override func viewDidLoad() {
+    
+    @IBOutlet var spinner: UIActivityIndicatorView!
+        //private var laoding = true
+        //private var stateCount = 50
+    
         // First, a structure to hold the decoded JSON data.
         struct states: Decodable {
             var name: String
             var nickname: String
         
         }
+    
+    var stateArray: [states] = []
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        spinner.startAnimating()
         
         // As of iOS 9, this URL must use HTTPS rather than HTTP.
         let urlString =  "https://cs.okstate.edu/~vcrews/states.php"
@@ -42,7 +50,10 @@ class TableViewController: UITableViewController {
                 let json = try JSONDecoder().decode([states].self,
                   from: data)
                 print(json)
-                //self.states = json
+                self.stateArray = json
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
               } catch let error as NSError {
                 print("Error serializing JSON Data: \(error)")
               }
@@ -50,8 +61,7 @@ class TableViewController: UITableViewController {
             // Execute the task.
             task.resume()
 
-        super.viewDidLoad()
-
+            
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
@@ -61,22 +71,24 @@ class TableViewController: UITableViewController {
 
     // MARK: - Table view data source
 
-    override func numberOfSections(in tableView: UITableView) -> Int {
+override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
         return 1
     }
 
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return 0
+    return stateArray.count
     }
 
     
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "myTableCell", for: indexPath)
 
         // Configure the cell...
-
+    cell.textLabel?.text = stateArray[indexPath[1]].name
+    cell.detailTextLabel?.text = stateArray[indexPath[1]].nickname
+    
         return cell
     }
     
