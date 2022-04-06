@@ -1,6 +1,6 @@
 //
 //  TableViewController.swift
-//  MAD_Ind04_lastName_firstName
+//  MAD_Ind04_Crews_Virginia
 //
 //  Created by Virginia Crews on 4/5/22.
 //
@@ -10,8 +10,7 @@ import UIKit
 class TableViewController: UITableViewController {
     
     @IBOutlet var spinner: UIActivityIndicatorView!
-        //private var laoding = true
-        //private var stateCount = 50
+        
     
         // First, a structure to hold the decoded JSON data.
         struct states: Decodable {
@@ -20,13 +19,13 @@ class TableViewController: UITableViewController {
         
         }
     
-    var stateArray: [states] = []
+    var stateArray: [states] = [] //array to for state info to be passed into the table cells
     override func viewDidLoad() {
         super.viewDidLoad()
-        spinner.startAnimating()
+        spinner.startAnimating() //starts animation for the spinner
         
         // As of iOS 9, this URL must use HTTPS rather than HTTP.
-        let urlString =  "https://cs.okstate.edu/~vcrews/states.php"
+        let urlString =  "https://cs.okstate.edu/~vcrews/states.php" //url for php file I created that passes the state info from the database
         guard let url = URL(string: urlString) else {
             print("Invalid URL")
             return
